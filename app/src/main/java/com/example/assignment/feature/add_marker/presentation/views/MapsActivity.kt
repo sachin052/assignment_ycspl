@@ -4,18 +4,17 @@ import android.Manifest
 import android.content.pm.PackageManager
 import android.location.Location
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
-import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import com.example.assignment.*
 import com.example.assignment.core.extensions.getCenterPosition
 import com.example.assignment.core.extensions.moveCameraAndAddMarkerTo
 import com.example.assignment.core.extensions.toLatLong
+import com.example.assignment.core.location.CustomFusedLocationProvider
+import com.example.assignment.core.location.LocationProvider
 import com.example.assignment.databinding.ActivityMapsBinding
 import com.example.assignment.feature.add_marker.presentation.MapActivityCallBack
 import com.example.assignment.feature.add_marker.presentation.MapViewModel
@@ -25,7 +24,6 @@ import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint

@@ -1,4 +1,4 @@
-package com.example.assignment
+package com.example.assignment.core.location
 
 import android.location.Location
 
