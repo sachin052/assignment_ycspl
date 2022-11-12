@@ -1,5 +1,6 @@
 package com.example.assignment.feature.add_marker.presentation
 
+import android.location.Location
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.assignment.core.helpers.Either
@@ -7,6 +8,7 @@ import com.example.assignment.feature.add_marker.domain.ui_entity.PropertyUIEnti
 import com.example.assignment.feature.add_marker.domain.use_cases.AddPropertyUseCase
 import com.google.android.gms.maps.model.LatLng
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
@@ -27,10 +29,27 @@ class MapViewModel @Inject constructor(private val addPropertyUseCase: AddProper
         }
     }
 
+    // use location
+    private val _userCurrentLocation = MutableStateFlow<Location?>(null)
+    val updateCurrentLocation: (Location) -> Unit = { location ->
+        viewModelScope.launch {
+            _userCurrentLocation.emit(location)
+        }
+    }
+
+    private lateinit var mapActivityCallBack:MapActivityCallBack
+
+    fun setUpCallBack(mapActivityCallBack:MapActivityCallBack){
+        this.mapActivityCallBack=mapActivityCallBack
+    }
+
+
     fun addProperty() {
         if (_addedMarkerLocation.value == null) {
+            // here can show the error
             return
         } else if (addedPropertyName.value.isNullOrEmpty()) {
+            // here can show the error
             return
         } else {
             val entity = PropertyUIEntity(addedPropertyName.value!!, _addedMarkerLocation.value!!)
@@ -54,5 +73,13 @@ class MapViewModel @Inject constructor(private val addPropertyUseCase: AddProper
             addedPropertyName.emit(null)
         }
     }
+
+    fun navigateToUserLocation() {
+        mapActivityCallBack.onClickLocationButton(_userCurrentLocation.value)
+    }
+}
+
+interface MapActivityCallBack{
+    fun onClickLocationButton(location: Location?)
 }
 

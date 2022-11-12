@@ -14,11 +14,13 @@ fun Location.toLatLong(): LatLng {
 /**
  * This will move camera and marker to the center of the map
  */
-infix fun GoogleMap.moveCameraAndAddMarkerTo(latLng: LatLng){
-    moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, kMap_ZOOM_LEVEL))
-    addMarker(
-        MarkerOptions().position(cameraPosition.target).title("My Position")
-    )
+infix fun GoogleMap.moveCameraAndAddMarkerTo(latLng: LatLng?){
+    latLng?.let {
+        moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, kMap_ZOOM_LEVEL))
+        addMarker(
+            MarkerOptions().position(cameraPosition.target).title("My Position")
+        )
+    }
 }
 
 fun GoogleMap.getCenterPosition(): LatLng {
